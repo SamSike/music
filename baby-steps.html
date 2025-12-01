@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<body>
+
+  <button id="startButton">Start Music</button>
+
+  <script src="https://unpkg.com/tone"></script>
+  <script>
+    document.getElementById("startButton").addEventListener("click", async () => {
+
+      await Tone.start(); // REQUIRED for browsers
+
+      // Synths
+      const lead = new Tone.Synth().toDestination();
+      const kick = new Tone.MembraneSynth().toDestination();
+
+      // Melody every 8th note
+      const scale = ["C4", "D4", "F4", "G4", "A4"];
+      Tone.Transport.scheduleRepeat(time => {
+        lead.triggerAttackRelease(
+          scale[Math.floor(Math.random() * scale.length)],
+          "8n",
+          time
+        );
+      }, "8n");
+
+      // Kick every quarter note
+      Tone.Transport.scheduleRepeat(time => {
+        kick.triggerAttackRelease("C2", "8n", time);
+      }, "4n");
+
+      Tone.Transport.start();
+    });
+  </script>
+
+</body>
+
+</html>
